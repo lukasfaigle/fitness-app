@@ -1,16 +1,96 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fitness App</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>Dein Trainingsplan Test 2</h1>
-  <button onclick="generatePlan()">Plan erstellen</button>
-  <ul id="plan"></ul>
+  <header class="app-header">
+    <h1>Fitness App</h1>
+    <div class="mode-buttons">
+      <button id="edit-mode-btn" class="btn ghost">Bearbeiten</button>
+      <button id="train-mode-btn" class="btn ghost">Training</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Bearbeitungsmodus -->
+    <section id="edit-mode" class="card">
+      <h2>Trainingsplan erstellen</h2>
+
+      <div class="row gap">
+        <input id="plan-name" type="text" placeholder="Workout-Name" />
+        <button id="create-plan" class="btn">Plan erstellen</button>
+        <button id="save-plan" class="btn outline">Plan speichern</button>
+      </div>
+
+    
+
+      <div class="grid">
+        <div class="card sub">
+          <h3>Übungen hinzufügen</h3>
+          <div class="row gap">
+            <select id="muscle-group">
+              <option value="">— Muskelgruppe wählen —</option>
+            </select>
+          </div>
+          <ul id="exercise-list" class="list"></ul>
+        </div>
+
+        <div class="card sub">
+          <h3>Aktueller Plan</h3>
+          <ul id="plan-list" class="list"></ul>
+        </div>
+
+        <div class="card sub">
+            <h3>Gespeicherte Trainings</h3>
+            <ul id="saved-plans" class="list"></ul>
+        </div>
+
+      </div>
+
+      <div class="card sub">
+        <h3>Abgeschlossene Trainings</h3>
+        <ul id="training-history" class="list"></ul>
+      </div>
+    </section>
+
+    <!-- Trainingsmodus -->
+    <!-- Trainingsmodus -->
+<section id="train-mode" class="card" style="display:none;">
+    <div class="card sub">
+        <h3>Übung hinzufügen</h3>
+        <div class="row gap">
+            <select id="muscle-group-train-select">
+                <option value="">— Muskelgruppe wählen —</option>
+            </select>
+        </div>
+        <ul id="exercise-list-train-list" class="list"></ul>
+    </div>
+
+  <div class="train-header">
+    <h2>Training: <span id="current-plan-name"></span></h2>
+    <div class="timers">
+      <div class="timer-pill">
+        Gesamtzeit: <span id="timer">00:00:00</span>
+      </div>
+    </div>
+  </div>
+
+  <ul id="train-plan-list" class="list"></ul>
+
+  <div class="row end">
+    <button id="end-training" class="btn danger">Training beenden</button>
+  </div>
+</section>
+
+  </main>
+
+  <footer class="footer">
+    <small>© Dein Fitness-Projekt</small>
+  </footer>
 
   <script src="app.js"></script>
 </body>
