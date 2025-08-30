@@ -52,12 +52,16 @@
       </div>
 
       <div class="card sub">
-        <h3>Abgeschlossene Trainings</h3>
-        <ul id="training-history" class="list"></ul>
+        <h3>
+          <button id="toggle-history" class="btn small outline">Abgeschlossene Trainings anzeigen</button>
+          <button id="clear-history" class="btn small danger">Alle löschen</button>
+        </h3>
+        <ul id="training-history" class="list" style="display:none;"></ul>
       </div>
+
+
     </section>
 
-    <!-- Trainingsmodus -->
     <!-- Trainingsmodus -->
 <section id="train-mode" class="card" style="display:none;">
     <div class="card sub">

@@ -194,6 +194,42 @@ function init() {
   renderPlanList();
   renderHistory();
   renderSavedPlans();
+
+  // Einzelnes Training löschen
+  historyList.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("[data-delete-history]");
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.deleteHistory);
+    if (confirm(`Training "${trainingHistory[idx].name}" wirklich löschen?`)) {
+      trainingHistory.splice(idx, 1);
+      localStorage.setItem("trainingHistory", JSON.stringify(trainingHistory));
+      renderHistory();
+    }
+  });
+
+  // Alle Trainings löschen
+  const clearHistoryBtn = document.getElementById("clear-history");
+  clearHistoryBtn.addEventListener("click", () => {
+    if (confirm("Alle abgeschlossenen Trainings wirklich löschen?")) {
+      trainingHistory = [];
+      localStorage.setItem("trainingHistory", JSON.stringify(trainingHistory));
+      renderHistory();
+    }
+  });
+
+
+  const toggleHistoryBtn = document.getElementById("toggle-history");
+  toggleHistoryBtn.addEventListener("click", () => {
+    const historyListEl = document.getElementById("training-history");
+    if (historyListEl.style.display === "none") {
+      historyListEl.style.display = "block";
+      toggleHistoryBtn.textContent = "Abgeschlossene Trainings verbergen";
+    } else {
+      historyListEl.style.display = "none";
+      toggleHistoryBtn.textContent = "Abgeschlossene Trainings anzeigen";
+    }
+  });
+
 }
 init();
 
@@ -214,6 +250,7 @@ createPlanBtn.addEventListener("click", () => {
   if (!name) return alert("Bitte einen Workout-Namen eingeben.");
   currentPlan = { name, exercises: [] };
   currentWorkout = currentPlan.exercises;
+  prefillLastTraining(currentWorkout);
   planNameInput.value = "";
   renderPlanList();
   renderSavedPlans();
@@ -524,9 +561,12 @@ function startRestTimer(exIdx){
 // =====================
 function renderHistory() {
   historyList.innerHTML = "";
-  trainingHistory.forEach(h => {
+  trainingHistory.forEach((h, idx) => {
     const li = document.createElement("li");
-    li.innerHTML = `<strong>${h.name}</strong> - ${new Date(h.timestamp).toLocaleString()}`;
+    li.innerHTML = `
+      <strong>${h.name}</strong> - ${new Date(h.timestamp).toLocaleString()}
+      <button class="btn small danger" data-delete-history="${idx}">Löschen</button>
+    `;
     h.exercises.forEach(ex => {
       const details = ex.setDetails.map(s => `${s.reps}x${s.weight}kg`).join(", ");
       li.innerHTML += `<div>${ex.name}: ${details}</div>`;
@@ -534,6 +574,7 @@ function renderHistory() {
     historyList.appendChild(li);
   });
 }
+
 
 // =====================
 // 15) Helpers
@@ -549,4 +590,33 @@ function formatHMS(total) {
   const m = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
   const s = String(total % 60).padStart(2, "0");
   return `${h}:${m}:${s}`;
+}
+
+function prefillLastTraining(workout) {
+  workout.forEach(exercise => {
+    // Suche die letzte Trainingseinheit, die diese Übung hatte
+    for (let i = trainingHistory.length - 1; i >= 0; i--) {
+      const lastWorkout = trainingHistory[i].exercises.find(e => e.name === exercise.name);
+      if (lastWorkout) {
+        // Sätze angleichen
+        while (exercise.setDetails.length < lastWorkout.setDetails.length) {
+          exercise.setDetails.push({ reps: 10, weight: 0, done: false });
+        }
+        while (exercise.setDetails.length > lastWorkout.setDetails.length) {
+          exercise.setDetails.pop();
+        }
+
+        // Werte übernehmen
+        exercise.setDetails.forEach((set, idx) => {
+          set.reps = lastWorkout.setDetails[idx]?.reps ?? set.reps;
+          set.weight = lastWorkout.setDetails[idx]?.weight ?? set.weight;
+        });
+
+        // Pause übernehmen
+        exercise.rest = lastWorkout.rest ?? exercise.rest;
+
+        break; // nur das letzte Training pro Übung
+      }
+    }
+  });
 }
