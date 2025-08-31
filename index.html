@@ -26,8 +26,6 @@
         <button id="save-plan" class="btn outline">Plan speichern</button>
       </div>
 
-    
-
       <div class="grid">
         <div class="card sub">
           <h3>Übungen hinzufügen</h3>
@@ -45,50 +43,50 @@
         </div>
 
         <div class="card sub">
-            <h3>Gespeicherte Trainings</h3>
-            <ul id="saved-plans" class="list"></ul>
+          <h3>Gespeicherte Trainings</h3>
+          <ul id="saved-plans" class="list"></ul>
         </div>
-
       </div>
 
       <div class="card sub">
-        <h3>
-          <button id="toggle-history" class="btn small outline">Abgeschlossene Trainings anzeigen</button>
+        <h3>Abgeschlossene Trainings</h3>
+
+        <div class="row gap">
+          <button id="toggle-history" class="btn small outline">Anzeigen</button>
           <button id="clear-history" class="btn small danger">Alle löschen</button>
-        </h3>
+        </div>
+
         <ul id="training-history" class="list" style="display:none;"></ul>
       </div>
-
-
     </section>
 
     <!-- Trainingsmodus -->
-<section id="train-mode" class="card" style="display:none;">
-    <div class="card sub">
+    <section id="train-mode" class="card" style="display:none;">
+      <div class="card sub">
         <h3>Übung hinzufügen</h3>
         <div class="row gap">
-            <select id="muscle-group-train-select">
-                <option value="">— Muskelgruppe wählen —</option>
-            </select>
+          <select id="muscle-group-train-select">
+            <option value="">— Muskelgruppe wählen —</option>
+          </select>
         </div>
         <ul id="exercise-list-train-list" class="list"></ul>
-    </div>
-
-  <div class="train-header">
-    <h2>Training: <span id="current-plan-name"></span></h2>
-    <div class="timers">
-      <div class="timer-pill">
-        Gesamtzeit: <span id="timer">00:00:00</span>
       </div>
-    </div>
-  </div>
 
-  <ul id="train-plan-list" class="list"></ul>
+      <div class="train-header">
+        <h2>Training: <span id="current-plan-name"></span></h2>
+        <div class="timers">
+          <div class="timer-pill">
+            Gesamtzeit: <span id="timer">00:00:00</span>
+          </div>
+        </div>
+      </div>
 
-  <div class="row end">
-    <button id="end-training" class="btn danger">Training beenden</button>
-  </div>
-</section>
+      <ul id="train-plan-list" class="list"></ul>
+
+      <div class="row end">
+        <button id="end-training" class="btn danger">Training beenden</button>
+      </div>
+    </section>
 
   </main>
 
@@ -97,5 +95,38 @@
   </footer>
 
   <script src="app.js"></script>
+
+  <!-- Pausentimer Overlay -->
+  <div id="pauseTimer" style="display:none;">
+    <div id="progress"></div>
+  </div>
+
+  <div id="central-rest-timer" style="
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 30px;
+      background: #eee;
+      border-radius: 5px;
+      overflow: hidden;
+      display: none;">
+    <div id="central-progress" style="width: 0%; height: 100%; background: #dc3545;"></div>
+  </div>
+
+  <!-- Modal für Drag&Drop Sortierung -->
+  <div id="sort-modal" style="display:none; justify-content:center; align-items:center; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7);">
+    <div class="sort-modal-content" style="background:white; padding:20px; border-radius:10px; width:300px;">
+      <h3>Übungen sortieren</h3>
+      <ul id="sort-list"></ul>
+      <div class="sort-buttons">
+        <button id="sort-save-btn" class="btn">Speichern</button>
+        <button id="sort-cancel-btn" class="btn outline">Abbrechen</button>
+      </div>
+    </div>
+  </div>
+
+
 </body>
 </html>
